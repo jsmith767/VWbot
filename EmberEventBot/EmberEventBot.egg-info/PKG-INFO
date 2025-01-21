@@ -1,0 +1,15 @@
+Metadata-Version: 2.2
+Name: EmberEventBot
+Version: 0.1.0
+Summary: A Telegram bot for event management
+Home-page: https://github.com/yourusername/EmberEventBot
+Author: Your Name
+Author-email: youremail@example.com
+Requires-Dist: python-telegram-bot
+Requires-Dist: pytz
+Requires-Dist: httpx
+Dynamic: author
+Dynamic: author-email
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: summary
