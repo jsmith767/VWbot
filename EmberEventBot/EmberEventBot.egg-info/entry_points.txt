@@ -1,2 +1,0 @@
-[console_scripts]
-ember-event-bot = EmberEventBot.__main__:main
