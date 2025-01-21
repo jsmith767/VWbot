@@ -1,0 +1,19 @@
+{
+    "commands":[
+        {"command":"calendar","description":"shows a small 2 month calendar"},
+        {"command":"contact","description":"update your contact settings"},
+        {"command":"create","description":"Creates an event"},
+        {"command":"deactivate","description":"Make an event inactive"},
+        {"command":"reactivate","description":"Make an event active"},
+        {"command":"edit","description":"Edit event, expects args"},
+        {"command":"help","description":"displays a list of bot commands"},
+        {"command":"list","description":"list events"},
+        {"command":"myevents","description":"shows active events you've rsvpd to"},
+        {"command":"rsvp","description":"rsvp to an event as going, +1, etc"},
+        {"command":"show","description":"show event"}
+    ],
+    "scope":{
+        "type": "chat",
+        "chat_id": "-1001810667392"
+    }
+}

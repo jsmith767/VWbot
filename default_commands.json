@@ -1,0 +1,15 @@
+{
+    "commands":[
+        {"command":"calendar","description":"shows a small 2 month calendar"},
+        {"command":"contact","description":"update your contact settings"},
+        {"command":"help","description":"displays a list of bot commands"},
+        {"command":"list","description":"list events"},
+        {"command":"myevents","description":"shows active events you've rsvpd to"},
+        {"command":"rsvp","description":"rsvp to an event as going, +1, etc"},
+        {"command":"show","description":"show event"},
+        {"command":"sidechat","description":"list official sidechats"}
+    ],
+    "scope":{
+        "type": "default"
+    }
+}
