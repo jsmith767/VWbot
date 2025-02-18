@@ -82,7 +82,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Main function to run the bot
 def main():
     # Replace 'YOUR_API_TOKEN' with your actual BotFather API token
-    # print(API_TOKEN)
+    print(API_TOKEN)
     api_token = API_TOKEN
 
     # Create the application instance

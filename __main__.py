@@ -48,7 +48,14 @@ from EmberEventBot.settings import EmberEventBotSettings, EmberJobSettings
 from EmberEventBot.validators import restricted
 from EmberEventBot.constants import UserAccessLevel
 
+import os
+
 SETTINGS = EmberEventBotSettings()
+
+log_dir = os.path.dirname(SETTINGS.log_path)
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
 logFormater = Formatter(SETTINGS.log_format)
 accessFormater = Formatter(SETTINGS.access_log_format)
 shandler = StreamHandler(sys.stdout)
