@@ -45,14 +45,21 @@ from EmberEventBot.scheduled_jobs.alerts import (
 )
 from EmberEventBot.scheduled_jobs.sweep import sweep
 from EmberEventBot.settings import EmberEventBotSettings, EmberJobSettings
-from EmberEventBot.validators import restricted
+#from EmberEventBot.validators import restricted
 from EmberEventBot.constants import UserAccessLevel
+
+
 
 SETTINGS = EmberEventBotSettings()
 logFormater = Formatter(SETTINGS.log_format)
 accessFormater = Formatter(SETTINGS.access_log_format)
 shandler = StreamHandler(sys.stdout)
 shandler.setFormatter(logFormater)
+import os
+
+log_dir = os.path.dirname(SETTINGS.log_path)
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
 rhandler = RotatingFileHandler(
     filename=SETTINGS.log_path,
     maxBytes=SETTINGS.log_max_bytes,
@@ -77,7 +84,7 @@ QUERY_FOR_REGEX: str = "^tg://query_for/(.*)$"
 CMD_REGEX: str = "^tg://cmd/(.*)$"
 
 
-@restricted(UserAccessLevel.USER)
+#@restricted(UserAccessLevel.USER)
 async def inline_keyboard_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Callback Query Handler that handles telegram keyboard responses"""
     query = update.callback_query

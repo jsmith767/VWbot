@@ -49,7 +49,9 @@ from telegram.ext import (
 # from EmberEventBot.validators import restricted
 # from EmberEventBot.constants import UserAccessLevel
 
-API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
+#API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
+API_TOKEN = os.getenv("API_TOKEN")
+
 
 # Command: /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -74,6 +76,34 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     await update.message.reply_text(about_text)
 
+    
+async def website(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    website_text = (
+    "https://vulnerabilitywhore.com/"
+    )
+    await update.message.reply_text(website_text)
+
+async def events(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    events_text = (
+    "https://vulnerabilitywhore.com/#portfolio "
+    )
+    await update.message.reply_text(events_text)
+
+
+async def calendar(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    calendar_text = (
+    "https://vulnerabilitywhore.com/calendar"
+    )
+    await update.message.reply_text(calendar_text)
+
+async def contact(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    contact_text = (
+    "https://vulnerabilitywhore.com/#contact"
+    )
+    await update.message.reply_text(contact_text)
+
+
+
 # Function to handle regular text messages
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
@@ -92,6 +122,10 @@ def main():
     app.add_handler(CommandHandler("start", start))  # /start command
     app.add_handler(CommandHandler("help", help))    # /help command
     app.add_handler(CommandHandler("about", about))  # /about command
+    app.add_handler(CommandHandler("website", website))  # /website command
+    app.add_handler(CommandHandler("events", events))  # /events command
+    app.add_handler(CommandHandler("calendar", calendar))  # /calendar command
+    app.add_handler(CommandHandler("contact", contact))  # /contact command
 
     # Add a handler for regular text messages
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
