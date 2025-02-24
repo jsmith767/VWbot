@@ -1,17 +1,12 @@
 from logging import getLogger
-
 from telegram import Update
 from telegram.ext import ContextTypes
-
 from EmberEventBot.exceptions import EventIdError
 from EmberEventBot.helpers import event_idx
 from EmberEventBot.keyboards import event_kbd, inactive_event_kbd
-from EmberEventBot.validators import restricted, UserAccessLevel
 
 logger = getLogger(__name__)
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def deactivate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Moves an event to the inactive que"""
     context.chat_data.pop('event_id', None)
@@ -24,8 +19,6 @@ async def deactivate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         kbd_markup = await event_kbd(context)
         await update.message.reply_text(query_for + cmd + "Deactivate which event?", reply_markup=kbd_markup)
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def update_deactivate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Finishes deactivate after user input"""
     user = update.callback_query.from_user
@@ -39,8 +32,6 @@ async def update_deactivate(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     logger.info(f"User {user.name} deactivated {event_id}")
     await context.bot.send_message(chat_id=update.effective_chat.id, text=f"{event_id} moved to inactive.")
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def reactivate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Moves an event to the inactive que"""
     context.chat_data.pop('event_id', None)
@@ -53,8 +44,6 @@ async def reactivate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         kbd_markup = await inactive_event_kbd(context)
         await update.message.reply_text(query_for + cmd + "Reactivate which event?", reply_markup=kbd_markup)
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def update_reactivate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Finishes reactivate after user input"""
     user = update.callback_query.from_user

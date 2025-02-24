@@ -13,24 +13,18 @@ from telegram.ext import (
 from EmberEventBot.helpers import event_id_exists, munge_date
 from EmberEventBot.models.event import EventModel
 from EmberEventBot.settings import EmberEventBotSettings
-from EmberEventBot.validators import restricted, UserAccessLevel
 
 settings = EmberEventBotSettings()
+logger = getLogger(__name__)
 
 yr = date.today().year
-
 years = [str(x) for x in [yr, yr + 1, yr % 100, (yr + 1) % 100]]
-
 date_regex = f"^(0[1-9]|1[012])[ -/.](0[1-9]|[12][0-9]|3[01])[- /.]({'|'.join(years)})$"
-
-logger = getLogger(__name__)
 
 EVENT, DATE, SUMMARY, MAXHEAD, DESCRIPTION = range(5)
 
-
 def create_conv_handler() -> ConversationHandler:
     """Builds a conversation handler for create event"""
-
     return ConversationHandler(
         entry_points=[CommandHandler("create", create)],
         states={
@@ -43,8 +37,6 @@ def create_conv_handler() -> ConversationHandler:
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def create(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     if 'event' not in context.chat_data.keys():
         context.chat_data['event'] = {}
@@ -62,8 +54,6 @@ async def create(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return EVENT
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     event_id = update.message.text.upper()
@@ -77,8 +67,6 @@ async def event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return DATE
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def date(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     text = update.message.text
@@ -87,7 +75,6 @@ async def date(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     if date_val is not None:
         text = date_val.strftime(settings.date_ymd)
     else:
-        # Try again
         await update.message.reply_text("Invalid date format. Try mm/dd/yy")
         return DATE
     context.chat_data['event']['date'] = text
@@ -96,8 +83,6 @@ async def date(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return SUMMARY
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def summary(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     text = update.message.text
@@ -108,8 +93,6 @@ async def summary(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return MAXHEAD
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def maxhead(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     logger.info("Maxhead of %s: %s", user.name, update.message.text)
@@ -120,8 +103,6 @@ async def maxhead(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return DESCRIPTION
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def description(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     context.chat_data['event']['description'] = update.message.text
     event_model = EventModel(**context.chat_data['event'])
@@ -150,7 +131,6 @@ async def description(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
         else:
             context.bot_data['alerts'] = {'newevent': [msg]}
     return ConversationHandler.END
-
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Cancels and ends the conversation."""

@@ -1,18 +1,20 @@
 from calendar import TextCalendar, MONDAY
 from datetime import datetime
 from logging import getLogger
-
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from EmberEventBot.validators import restricted, UserAccessLevel
-
 logger = getLogger(__name__)
 
-
-@restricted(UserAccessLevel.USER)
 async def calendar_(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Calendar"""
+    # Initialize events dictionary if it doesn't exist
+    if 'events' not in context.bot_data:
+        context.bot_data['events'] = {
+            'active': [],
+            'inactive': []
+        }
+
     mm = datetime.now().month
     yy = datetime.now().year
     dd = datetime.now().day

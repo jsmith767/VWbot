@@ -1,16 +1,11 @@
 from logging import getLogger
-
 from telegram import Update
 from telegram.ext import ContextTypes
-
 from EmberEventBot.exceptions import EventIdError
 from EmberEventBot.helpers import event_idx
-from EmberEventBot.validators import restricted, UserAccessLevel
 
 logger = getLogger(__name__)
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def rm(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Removes an event
 

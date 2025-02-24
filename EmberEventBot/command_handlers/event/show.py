@@ -1,18 +1,13 @@
 from logging import getLogger
-
 from telegram import Update
 from telegram.ext import ContextTypes
-
 from EmberEventBot.keyboards import event_kbd
 from EmberEventBot.models.event import EventModel, EventList, UserModel
 from EmberEventBot.settings import EmberEventBotSettings
-from EmberEventBot.validators import restricted, UserAccessLevel
 
 logger = getLogger()
 settings = EmberEventBotSettings()
 
-
-@restricted(UserAccessLevel.USER)
 async def show(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Responds with details of an event"""
     context.chat_data.clear()
@@ -31,8 +26,6 @@ async def show(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         cmd = '<a href="tg://cmd/show">\u200b</a>'
         await update.message.reply_text(query_for + cmd + "Please choose an event:", reply_markup=kbd_markup)
 
-
-@restricted(UserAccessLevel.USER)
 async def update_show(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Finishes show after user input"""
     user = UserModel(id=update.effective_user.id, name=update.effective_user.full_name)

@@ -1,5 +1,4 @@
 from logging import getLogger
-
 from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,
@@ -14,10 +13,8 @@ from EmberEventBot.keyboards import event_kbd, rsvp_kbd, plus_one_kbd
 from EmberEventBot.models.event import EventModel
 from EmberEventBot.models.user import UserModel
 from EmberEventBot.settings import EmberEventBotSettings
-from EmberEventBot.validators import restricted, UserAccessLevel
 
 logger = getLogger(__name__)
-
 SETTINGS = EmberEventBotSettings()
 
 # Stages
@@ -25,7 +22,6 @@ CALLBACK_PREFIX = "rsvp"
 SLICE = len(CALLBACK_PREFIX) + 1
 # Callback data
 EVENT, STATUS, PLUS = [CALLBACK_PREFIX + str(x) for x in range(3)]
-
 
 def rsvp_conv_handler() -> ConversationHandler:
     """Builds a conversation handler for rsvp"""
@@ -39,8 +35,6 @@ def rsvp_conv_handler() -> ConversationHandler:
         fallbacks=[CommandHandler("rsvp", rsvp)],
     )
 
-
-@restricted(UserAccessLevel.USER)
 async def rsvp(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Starts rsvp action"""
     query = update.callback_query
@@ -56,8 +50,6 @@ async def rsvp(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         await query.edit_message_text(msg, reply_markup=kbd_markup)
     return EVENT
 
-
-@restricted(UserAccessLevel.USER)
 async def event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Catches the Event_ID and asks for Status"""
     query = update.callback_query
@@ -74,8 +66,6 @@ async def event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return STATUS
 
-
-@restricted(UserAccessLevel.USER)
 async def status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Catches the Status and asks for Value"""
     query = update.callback_query
@@ -115,8 +105,6 @@ async def status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     return ConversationHandler.END
 
-
-@restricted(UserAccessLevel.USER)
 async def plusone(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Catches the Value and saves"""
     query = update.callback_query

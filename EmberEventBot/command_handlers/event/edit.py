@@ -1,5 +1,4 @@
 from logging import getLogger
-
 from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,
@@ -15,10 +14,8 @@ from EmberEventBot.helpers import event_idx, event_id_exists, munge_date
 from EmberEventBot.keyboards import event_kbd, field_kbd
 from EmberEventBot.models.event import EventModel
 from EmberEventBot.settings import EmberEventBotSettings
-from EmberEventBot.validators import restricted, UserAccessLevel
 
 logger = getLogger(__name__)
-
 SETTINGS = EmberEventBotSettings()
 
 # Stages
@@ -27,10 +24,8 @@ CALLBACK_PREFIX = "event"
 # Callback data
 EVENT, FIELD, VALUE, AGAIN = [CALLBACK_PREFIX + str(x) for x in range(4)]
 
-
 def edit_conv_handler() -> ConversationHandler:
     """Builds a conversation handler for create event"""
-
     return ConversationHandler(
         entry_points=[CommandHandler("edit", edit)],
         states={
@@ -41,8 +36,6 @@ def edit_conv_handler() -> ConversationHandler:
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def edit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Starts edit action"""
     query = update.callback_query
@@ -62,8 +55,6 @@ async def edit(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         )
     return EVENT
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Catches the Event_ID and asks for Field"""
     query = update.callback_query
@@ -78,11 +69,8 @@ async def event(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         "Please select the field you want to edit.",
         reply_markup=kbd_markup
     )
-
     return FIELD
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def field(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Catches the Field and asks for Value"""
     query = update.callback_query
@@ -106,8 +94,6 @@ async def field(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await query.edit_message_text(msg)
     return VALUE
 
-
-@restricted(UserAccessLevel.ADMIN)
 async def value(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Catches the Value and saves"""
     event_id = context.chat_data['event_id']
@@ -135,7 +121,6 @@ async def value(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     await update.message.reply_text(f"{data_field} set to: {text}")
     return ConversationHandler.END
-
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Cancels and ends the conversation."""

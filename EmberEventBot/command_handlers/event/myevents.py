@@ -1,16 +1,11 @@
 from logging import getLogger
-
 from telegram import Update
 from telegram.ext import ContextTypes
-
 from EmberEventBot.models.event import EventList
 from EmberEventBot.models.user import UserModel
-from EmberEventBot.validators import restricted, UserAccessLevel
 
 logger = getLogger()
 
-
-@restricted(UserAccessLevel.USER)
 async def myevents(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handles the show my events command"""
     resp = EventList(__root__=context.bot_data['events']['active']).get_user_status(

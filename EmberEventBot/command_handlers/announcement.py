@@ -2,8 +2,6 @@
 
 from logging import getLogger
 from telegram import Update
-from telegram.ext import ContextTypes
-from telegram import Update
 from telegram.ext import (
     CallbackQueryHandler,
     CommandHandler,
@@ -15,11 +13,9 @@ from telegram.ext import (
 from EmberEventBot.helpers import bubble
 from EmberEventBot.constants import ConfirmKBD, ChatGroups
 from EmberEventBot.settings import EmberEventBotSettings
-from EmberEventBot.validators import UserAccessLevel, restricted
 from EmberEventBot.keyboards import chat_groups_kbd, confirm_kbd
 
 logger = getLogger(__name__)
-
 SETTINGS = EmberEventBotSettings()
 
 # Stages
@@ -52,7 +48,6 @@ def announcement_conv_handler() -> ConversationHandler:
         fallbacks=[CommandHandler("cancel", cancel)],
     )
 
-@restricted(UserAccessLevel.ADMIN)
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """Starts announcement action and asks for headline"""
     context.chat_data.clear()
@@ -61,7 +56,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     )
     return HEADLINE
 
-@restricted(UserAccessLevel.ADMIN)
 async def headline(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """Catches the headline and asks for the body"""
     context.chat_data['headline'] = update.message.text
@@ -70,7 +64,6 @@ async def headline(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     )
     return BODY
 
-@restricted(UserAccessLevel.ADMIN)
 async def body(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """Catches the body and asks for the chat group"""
     context.chat_data['body'] = update.message.text
@@ -82,7 +75,6 @@ async def body(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     )
     return CHAT
 
-@restricted(UserAccessLevel.ADMIN)
 async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """Catches the chat group and asks for confirm"""
     query = update.callback_query
@@ -97,7 +89,6 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     )
     return CONFIRM
 
-@restricted(UserAccessLevel.ADMIN)
 async def confirm(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     """Catches confirm and sends or re-starts"""
     query = update.callback_query

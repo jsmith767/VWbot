@@ -2,6 +2,9 @@ from typing import List, Dict
 from logging import INFO
 from pydantic import BaseSettings
 from EmberEventBot.constants import ChatGroups, Decoration
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 class EmberJobSettings(BaseSettings):
     event_alert_enabled: bool = True
@@ -28,6 +31,10 @@ class EmberJobSettings(BaseSettings):
 class EmberEventBotSettings(BaseSettings):
     embtoken: str = ""
     tz: str = "America/Los_Angeles"
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = 'utf-8'
     admin_group: str = ChatGroups.ADMIN.value
     user_group: str = ChatGroups.INFO.value
     valid_group: List[str] = [ChatGroups.BOTDEV.value]
